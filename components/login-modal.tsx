@@ -43,8 +43,8 @@ export function LoginModal() {
 
     return (
         <Dialog open={isLoginModalOpen} onOpenChange={closeLoginModal}>
-            <DialogContent className="max-w-3xl p-0 bg-[#1E1E1E] border-[#252525] rounded-lg grid grid-cols-2">
-                <div className="relative h-full w-full">
+            <DialogContent className="w-full max-w-[95%] sm:max-w-3xl p-0 bg-[#1E1E1E] border-[#252525] rounded-lg grid grid-cols-1 sm:grid-cols-2">
+                <div className="relative h-48 sm:h-full w-full hidden sm:block">
                     <Image
                         src="/login-placeholder.jpeg"
                         alt="Inloggningsbild"
@@ -53,7 +53,7 @@ export function LoginModal() {
                         className="rounded-l-lg"
                     />
                 </div>
-                <div className="relative p-8">
+                <div className="relative p-4 sm:p-8">
                     <DialogTitle className="sr-only">{t("auth.login")}</DialogTitle>
                     <Button
                         variant="ghost"
@@ -64,18 +64,18 @@ export function LoginModal() {
                         <X className="h-4 w-4" />
                     </Button>
 
-                    <div className="text-center mb-8">
-                        <h1 className="text-2xl font-bold text-white mb-2">{t("auth.login")}</h1>
+                    <div className="text-center mb-6 sm:mb-8">
+                        <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">{t("auth.login")}</h1>
                     </div>
 
                     {error && (
-                        <div className="bg-destructive/10 border border-destructive text-destructive px-4 py-3 rounded-lg mb-6 flex items-center">
-                            <AlertCircle className="h-5 w-5 mr-2" />
+                        <div className="bg-destructive/10 border border-destructive text-destructive px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 sm:mb-6 flex items-center text-sm">
+                            <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 flex-shrink-0" />
                             <span>{error}</span>
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                         <div className="space-y-2">
                             <label
                                 htmlFor="email-login"
@@ -89,7 +89,7 @@ export function LoginModal() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="bg-card border-border text-foreground focus:ring-primary focus:border-primary"
+                                className="bg-card border-border text-foreground focus:ring-primary focus:border-primary text-sm sm:text-base"
                                 placeholder={t("login.emailPlaceholder")}
                             />
                         </div>
@@ -107,7 +107,7 @@ export function LoginModal() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="bg-card border-border text-foreground focus:ring-primary focus:border-primary"
+                                className="bg-card border-border text-foreground focus:ring-primary focus:border-primary text-sm sm:text-base"
                                 placeholder={t("login.passwordPlaceholder")}
                             />
                                                                                     <div className="text-right">
@@ -124,7 +124,7 @@ export function LoginModal() {
                         <div>
                             <Button
                                 type="submit"
-                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-5"
+                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-4 sm:py-5 text-sm sm:text-base"
                                 disabled={isLoading}
                             >
                                 {isLoading ? t("login.submitting") : t("auth.login")}
@@ -132,7 +132,7 @@ export function LoginModal() {
                         </div>
                     </form>
 
-                    <div className="relative my-6">
+                    <div className="relative my-4 sm:my-6">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t border-gray-600" />
                         </div>
@@ -141,19 +141,19 @@ export function LoginModal() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3">
-                        <Button variant="outline" className="w-full bg-white text-black hover:bg-gray-200">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                        <Button variant="outline" className="w-full bg-white text-black hover:bg-gray-200 text-xs sm:text-sm py-2 sm:py-3">
                             Google
                         </Button>
-                        <Button variant="outline" className="w-full bg-[#5865F2] text-white hover:bg-[#4752C4]">
+                        <Button variant="outline" className="w-full bg-[#5865F2] text-white hover:bg-[#4752C4] text-xs sm:text-sm py-2 sm:py-3">
                             Discord
                         </Button>
-                        <Button variant="outline" className="w-full bg-black text-white border-gray-600 hover:bg-gray-900">
+                        <Button variant="outline" className="w-full bg-black text-white border-gray-600 hover:bg-gray-900 text-xs sm:text-sm py-2 sm:py-3">
                             X
                         </Button>
                     </div>
 
-                    <div className="mt-6 text-center text-sm">
+                    <div className="mt-4 sm:mt-6 text-center text-sm">
                         <p className="text-muted-foreground">
                             {t("login.noAccount")} {" "}
                             <button onClick={switchToSignup} className="text-primary hover:underline">
