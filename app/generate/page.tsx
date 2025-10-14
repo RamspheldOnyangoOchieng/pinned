@@ -557,22 +557,22 @@ export default function GenerateImagePage() {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-background text-foreground">
       {/* Left Column - Generation Controls */}
-      <div className="w-full lg:w-1/2 p-6 border-b lg:border-b-0 lg:border-r border-border overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
+      <div className="w-full lg:w-1/2 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-border overflow-y-auto">
+        <div className="flex justify-between items-center mb-4 sm:mb-6">
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="mr-1 p-0" onClick={() => router.back()} aria-label="Go back">
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             </Button>
-            <Wand2 className="h-6 w-6" />
-            <h1 className="text-2xl font-bold">{t("generate.title")}</h1>
+            <Wand2 className="h-5 w-5 sm:h-6 sm:w-6" />
+            <h1 className="text-xl sm:text-2xl font-bold">{t("generate.title")}</h1>
           </div>
           <ThemeToggle />
         </div>
 
 
         {/* Prompt Input */}
-        <div className="relative mb-6">
-          <div className="absolute right-3 top-3 flex items-center gap-2">
+        <div className="relative mb-4 sm:mb-6">
+          <div className="absolute right-2 sm:right-3 top-2 sm:top-3 flex items-center gap-1 sm:gap-2">
             <Copy
               className="h-4 w-4 text-muted-foreground cursor-pointer"
               onClick={() => {
@@ -583,7 +583,7 @@ export default function GenerateImagePage() {
             <Button
               size="sm"
               variant="outline"
-              className="h-8 bg-transparent"
+              className="h-7 sm:h-8 bg-transparent text-xs sm:text-sm px-2 sm:px-3"
               onClick={() => {
                 navigator.clipboard.readText().then((text) => {
                   setPrompt(text)
@@ -597,17 +597,17 @@ export default function GenerateImagePage() {
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="w-full h-32 bg-card rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-primary border border-border"
+            className="w-full h-28 sm:h-32 bg-card rounded-xl p-3 sm:p-4 resize-none focus:outline-none focus:ring-2 focus:ring-primary border border-border text-sm sm:text-base"
             placeholder={t("generate.promptPlaceholder")}
           />
         </div>
 
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowNegativePrompt(!showNegativePrompt)}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground text-xs sm:text-sm"
           >
             {showNegativePrompt ? t("generate.hideNegativePrompt") : t("generate.showNegativePrompt")}
           </Button>
@@ -615,14 +615,14 @@ export default function GenerateImagePage() {
           {/* Negative Prompt Input - Only shown when toggled */}
           {showNegativePrompt && (
             <div className="mt-3">
-              <label htmlFor="negative-prompt" className="block text-sm font-medium text-muted-foreground mb-2">
+              <label htmlFor="negative-prompt" className="block text-xs sm:text-sm font-medium text-muted-foreground mb-2">
                 {t("generate.negativePromptLabel")}
               </label>
               <textarea
                 id="negative-prompt"
                 value={negativePrompt}
                 onChange={(e) => setNegativePrompt(e.target.value)}
-                className="w-full h-20 bg-card rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-primary border border-border text-sm"
+                className="w-full h-16 sm:h-20 bg-card rounded-xl p-3 sm:p-4 resize-none focus:outline-none focus:ring-2 focus:ring-primary border border-border text-xs sm:text-sm"
                 placeholder={t("generate.negativePromptPlaceholder")}
               />
             </div>
@@ -630,16 +630,16 @@ export default function GenerateImagePage() {
         </div>
 
         {/* Suggestions */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4">{t("generate.suggestions")}</h3>
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">{t("generate.suggestions")}</h3>
           {categories.length > 0 ? (
             <Tabs defaultValue={categories[0]} value={activeCategory} onValueChange={handleCategoryChange}>
-              <TabsList className="mb-4 bg-card border border-border p-1 rounded-lg">
+              <TabsList className="mb-3 sm:mb-4 bg-card border border-border p-1 rounded-lg overflow-x-auto flex w-full">
                 {categories.map((category) => (
                   <TabsTrigger
                     key={category}
                     value={category}
-                    className="capitalize text-foreground data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#1c79ab] data-[state=active]:to-[#00ccff] data-[state=active]:text-white data-[state=active]:shadow-md"
+                    className="capitalize text-foreground data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#1c79ab] data-[state=active]:to-[#00ccff] data-[state=active]:text-white data-[state=active]:shadow-md text-xs sm:text-sm px-2 sm:px-3"
                   >
                     {category}
                   </TabsTrigger>
@@ -690,32 +690,32 @@ export default function GenerateImagePage() {
         </div>
 
         {/* Number of Images */}
-        <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-4">{t("generate.numberOfImages")}</h3>
+        <div className="mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">{t("generate.numberOfImages")}</h3>
           <div className="flex flex-wrap gap-2 md:gap-4">
             {imageOptions.map((option) => (
               <button
                 key={option.value}
                 onClick={() => setSelectedCount(option.value)}
-                className={`flex flex-col items-center gap-1 px-3 md:px-6 py-2 md:py-3 rounded-lg transition-all ${selectedCount === option.value
+                className={`flex flex-col items-center gap-1 px-3 sm:px-4 md:px-6 py-2 md:py-3 rounded-lg transition-all ${selectedCount === option.value
                   ? "bg-primary text-primary-foreground"
                   : "bg-card text-muted-foreground hover:bg-muted"
                   }`}
               >
-                <span className="text-base md:text-lg font-semibold">{option.label}</span>
+                <span className="text-sm sm:text-base md:text-lg font-semibold">{option.label}</span>
         <span className="text-xs">{option.tokens} tokens</span>
               </button>
             ))}
           </div>
-          <div className="mt-2 text-sm text-muted-foreground">
+          <div className="mt-2 text-xs sm:text-sm text-muted-foreground">
       Stability: 5 tokens per image
           </div>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-destructive/20 border border-destructive text-destructive-foreground rounded-lg flex items-center">
-            <AlertCircle className="h-5 w-5 mr-2" />
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-destructive/20 border border-destructive text-destructive-foreground rounded-lg flex items-center text-sm">
+            <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
@@ -723,18 +723,18 @@ export default function GenerateImagePage() {
         {/* Generate Button */}
         <div className="relative">
           <Button
-            className="w-full py-6 text-lg bg-primary hover:bg-primary/90 text-primary-foreground"
+            className="w-full py-4 sm:py-6 text-base sm:text-lg bg-primary hover:bg-primary/90 text-primary-foreground"
             disabled={!prompt.trim() || isGenerating}
             onClick={handleGenerate}
           >
             {isGenerating ? (
               <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                 {t("generate.generating")} {Math.round(generationProgress)}%
               </>
             ) : (
               <>
-                <Wand2 className="mr-2 h-5 w-5" />
+                <Wand2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 {t("generate.generateButton")} ({tokensRequired} tokens)
               </>
             )}
@@ -743,9 +743,9 @@ export default function GenerateImagePage() {
 
         {/* View Collection Button */}
         {generatedImages.length > 0 && (
-          <div className="mt-6">
-            <Button variant="outline" className="w-full bg-transparent" onClick={viewCollection}>
-              <FolderOpen className="h-5 w-5 mr-2" />
+          <div className="mt-4 sm:mt-6">
+            <Button variant="outline" className="w-full bg-transparent text-sm sm:text-base" onClick={viewCollection}>
+              <FolderOpen className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
         {t("generate.viewCollection")}
             </Button>
           </div>
@@ -753,17 +753,17 @@ export default function GenerateImagePage() {
       </div>
 
       {/* Right Column - Generated Images */}
-      <div className="w-full lg:w-1/2 p-6 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-      <h2 className="text-2xl font-bold">{t("generate.generatedImages")}</h2>
+      <div className="w-full lg:w-1/2 p-4 sm:p-6 overflow-y-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
+      <h2 className="text-xl sm:text-2xl font-bold">{t("generate.generatedImages")}</h2>
           {generatedImages.length > 0 && (
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={handleDownloadAll}>
-                <Download className="h-4 w-4 mr-2" />
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button variant="outline" size="sm" onClick={handleDownloadAll} className="flex-1 sm:flex-none text-xs sm:text-sm">
+                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
         {t("generate.downloadAll")}
               </Button>
-              <Button variant="outline" size="sm" onClick={viewCollection}>
-                <FolderOpen className="h-4 w-4 mr-2" />
+              <Button variant="outline" size="sm" onClick={viewCollection} className="flex-1 sm:flex-none text-xs sm:text-sm">
+                <FolderOpen className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
         {t("generate.collection")}
               </Button>
             </div>
