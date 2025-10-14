@@ -149,50 +149,50 @@ export default function LandingDisclaimerModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-2 sm:p-4">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-xl w-full max-w-[95%] sm:max-w-[90%] md:max-w-[75%] lg:max-w-[65%] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto flex flex-col p-4 sm:p-6 md:p-8 relative border border-blue-400/30">
+      <div className="bg-gradient-to-br from-primary/10 via-background to-primary/5 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-[95%] sm:max-w-[90%] md:max-w-[75%] lg:max-w-[65%] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto flex flex-col p-4 sm:p-6 md:p-8 relative border-2 border-primary/20">
         {!showSettings && (
           <>
-            <h2 className="text-xl sm:text-2xl font-bold mb-2 text-white">{t.ageTitle}</h2>
-            <p className="text-sm sm:text-base text-white mb-3">{t.ageDesc}</p>
-            <p className="text-white text-xs sm:text-sm mb-4 flex flex-wrap gap-2 sm:gap-4">
-              <a href="/terms" className="underline hover:text-blue-200" target="_blank" rel="noopener noreferrer">{t.termsLink}</a>
-              <a href="/privacy" className="underline hover:text-blue-200" target="_blank" rel="noopener noreferrer">{t.privacyLink}</a>
+            <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">{t.ageTitle}</h2>
+            <p className="text-sm sm:text-base text-muted-foreground mb-3">{t.ageDesc}</p>
+            <p className="text-muted-foreground text-xs sm:text-sm mb-4 flex flex-wrap gap-2 sm:gap-4">
+              <a href="/terms" className="underline hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">{t.termsLink}</a>
+              <a href="/privacy" className="underline hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">{t.privacyLink}</a>
             </p>
-            <h3 className="text-base sm:text-lg font-bold mb-2 text-white">{t.cookieTitle}</h3>
-            <p className="text-sm sm:text-base text-white mb-4">{t.cookieDesc}</p>
-            <h3 className="text-base sm:text-lg font-bold mb-2 text-white">{t.rulesTitle}</h3>
-            <ul className="text-white text-xs sm:text-sm mb-6 list-disc pl-4 sm:pl-6 max-h-40 sm:max-h-48 overflow-y-auto">
+            <h3 className="text-base sm:text-lg font-bold mb-2 text-foreground">{t.cookieTitle}</h3>
+            <p className="text-sm sm:text-base text-muted-foreground mb-4">{t.cookieDesc}</p>
+            <h3 className="text-base sm:text-lg font-bold mb-2 text-foreground">{t.rulesTitle}</h3>
+            <ul className="text-muted-foreground text-xs sm:text-sm mb-6 list-disc pl-4 sm:pl-6 max-h-40 sm:max-h-48 overflow-y-auto border border-primary/10 rounded-lg p-3 bg-muted/30">
               {t.rules.map((rule, idx) => (
                 <li key={idx} className="mb-1">{rule}</li>
               ))}
             </ul>
             <div className="space-y-2 sm:space-y-3 mb-4">
-              <label className="flex items-start gap-2 text-white text-xs sm:text-sm cursor-pointer select-none">
+              <label className="flex items-start gap-2 text-foreground text-xs sm:text-sm cursor-pointer select-none">
                 <input
                   type="checkbox"
-                  className="mt-0.5 sm:mt-1 h-4 w-4 flex-shrink-0 rounded border-blue-300 text-blue-600 focus:ring-blue-400"
+                  className="mt-0.5 sm:mt-1 h-4 w-4 flex-shrink-0 rounded border-primary/30 text-primary focus:ring-primary"
                   checked={ageConfirmed}
                   onChange={(e) => setAgeConfirmed(e.target.checked)}
                 />
                 <span>{t.ageCheckbox}</span>
               </label>
-              <label className="flex items-start gap-2 text-white text-xs sm:text-sm cursor-pointer select-none">
+              <label className="flex items-start gap-2 text-foreground text-xs sm:text-sm cursor-pointer select-none">
                 <input
                   type="checkbox"
-                  className="mt-0.5 sm:mt-1 h-4 w-4 flex-shrink-0 rounded border-blue-300 text-blue-600 focus:ring-blue-400"
+                  className="mt-0.5 sm:mt-1 h-4 w-4 flex-shrink-0 rounded border-primary/30 text-primary focus:ring-primary"
                   checked={termsAccepted}
                   onChange={(e) => setTermsAccepted(e.target.checked)}
                 />
                 <span>{t.termsCheckbox}</span>
               </label>
               {(!ready || showValidation) && (
-                <p className={`text-xs sm:text-sm font-medium transition-colors ${showValidation ? "text-red-200 animate-pulse" : "text-red-100/80"}`}>{t.needConfirm}</p>
+                <p className={`text-xs sm:text-sm font-medium transition-colors ${showValidation ? "text-destructive animate-pulse" : "text-destructive/80"}`}>{t.needConfirm}</p>
               )}
             </div>
             <div className="flex flex-col gap-2 sm:gap-3 mt-2">
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <Button
-                  className="bg-white text-blue-600 hover:text-blue-700 font-semibold text-sm sm:text-base flex-1 border border-blue-200 hover:border-blue-300 shadow-sm pointer-events-auto py-2 sm:py-3"
+                  className="bg-background border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-semibold text-sm sm:text-base flex-1 shadow-sm pointer-events-auto py-2 sm:py-3"
                   type="button"
                   onClick={() => setShowSettings(true)}
                 >
@@ -200,7 +200,7 @@ export default function LandingDisclaimerModal({
                 </Button>
                 <Button
                   variant="destructive"
-                  className={`bg-red-500 hover:bg-red-600 text-white text-sm sm:text-base font-semibold flex-1 shadow py-2 sm:py-3 ${!ready && "opacity-60"}`}
+                  className={`bg-destructive hover:bg-destructive/90 text-destructive-foreground text-sm sm:text-base font-semibold flex-1 shadow py-2 sm:py-3 ${!ready && "opacity-60"}`}
                   type="button"
                   onClick={rejectNonEssential}
                   aria-disabled={!ready}
@@ -221,55 +221,55 @@ export default function LandingDisclaimerModal({
         )}
 
         {showSettings && (
-          <div className="text-white space-y-4 sm:space-y-6">
+          <div className="text-foreground space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl sm:text-2xl font-bold">{t.cookieTitle}</h2>
               <button
-                className="text-xs sm:text-sm underline hover:text-blue-200"
+                className="text-xs sm:text-sm underline hover:text-primary transition-colors"
                 onClick={() => setShowSettings(false)}
               >
                 ← Back
               </button>
             </div>
-            <p className="text-xs sm:text-sm opacity-90">{t.cookieDesc}</p>
-            <div className="bg-blue-800/40 rounded-lg p-3 sm:p-4 border border-blue-300/20">
+            <p className="text-xs sm:text-sm text-muted-foreground">{t.cookieDesc}</p>
+            <div className="bg-primary/5 rounded-lg p-3 sm:p-4 border border-primary/20">
               <h3 className="font-semibold text-sm sm:text-base">Necessary</h3>
-              <p className="text-xs opacity-80">
+              <p className="text-xs text-muted-foreground">
                 Required for the site to function (always enabled).
               </p>
-              <div className="mt-2 text-xs inline-block px-2 py-1 rounded bg-blue-900/50 border border-blue-700/40">
+              <div className="mt-2 text-xs inline-block px-2 py-1 rounded bg-primary/10 border border-primary/30">
                 Active
               </div>
             </div>
-            <div className="bg-blue-800/40 rounded-lg p-3 sm:p-4 border border-blue-300/20 flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
+            <div className="bg-primary/5 rounded-lg p-3 sm:p-4 border border-primary/20 flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
 
                 <h3 className="font-semibold text-sm sm:text-base">Analytics</h3>
-                <p className="text-xs opacity-80">
+                <p className="text-xs text-muted-foreground">
                   Helps us understand usage and improve the service.
                 </p>
               </div>
               <label className="inline-flex items-center gap-2 cursor-pointer select-none flex-shrink-0">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-blue-300 text-blue-600 focus:ring-blue-400"
+                  className="h-4 w-4 rounded border-primary/30 text-primary focus:ring-primary"
                   checked={prefs.analytics}
                   onChange={(e) => setPrefs((p) => ({ ...p, analytics: e.target.checked }))}
                 />
                 <span className="text-xs sm:text-sm">{prefs.analytics ? "On" : "Off"}</span>
               </label>
             </div>
-            <div className="bg-blue-800/40 rounded-lg p-3 sm:p-4 border border-blue-300/20 flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
+            <div className="bg-primary/5 rounded-lg p-3 sm:p-4 border border-primary/20 flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
                 <h3 className="font-semibold text-sm sm:text-base">Marketing</h3>
-                <p className="text-xs opacity-80">
+                <p className="text-xs text-muted-foreground">
                   Used for personalized content and offers.
                 </p>
               </div>
               <label className="inline-flex items-center gap-2 cursor-pointer select-none flex-shrink-0">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-blue-300 text-blue-600 focus:ring-blue-400"
+                  className="h-4 w-4 rounded border-primary/30 text-primary focus:ring-primary"
                   checked={prefs.marketing}
                   onChange={(e) => setPrefs((p) => ({ ...p, marketing: e.target.checked }))}
                 />
@@ -280,7 +280,7 @@ export default function LandingDisclaimerModal({
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <Button
                   variant="outline"
-                  className={`bg-white text-blue-600 hover:text-blue-700 text-sm sm:text-base font-semibold flex-1 border border-blue-200 hover:border-blue-300 shadow-sm py-2 sm:py-3 ${!ready && "opacity-60"}`}
+                  className={`bg-background border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 text-sm sm:text-base font-semibold flex-1 shadow-sm py-2 sm:py-3 ${!ready && "opacity-60"}`}
                   type="button"
                   onClick={saveCustom}
                   aria-disabled={!ready}
@@ -289,7 +289,7 @@ export default function LandingDisclaimerModal({
                 </Button>
                 <Button
                   variant="destructive"
-                  className={`bg-red-500 hover:bg-red-600 text-white text-sm sm:text-base font-semibold flex-1 shadow py-2 sm:py-3 ${!ready && "opacity-60"}`}
+                  className={`bg-destructive hover:bg-destructive/90 text-destructive-foreground text-sm sm:text-base font-semibold flex-1 shadow py-2 sm:py-3 ${!ready && "opacity-60"}`}
                   type="button"
                   onClick={rejectNonEssential}
                   aria-disabled={!ready}
@@ -298,12 +298,12 @@ export default function LandingDisclaimerModal({
                 </Button>
               </div>
               <Button
-                className={`bg-blue-500 hover:bg-blue-600 text-white text-sm sm:text-base font-semibold w-full sm:flex-1 shadow py-2 sm:py-3 focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 ${!ready && "opacity-60"}`}
+                className={`bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base font-semibold w-full sm:flex-1 shadow py-2 sm:py-3 focus:ring-2 focus:ring-offset-2 focus:ring-primary ${!ready && "opacity-60"}`}
                 type="button"
                 onClick={acceptAll}
                 aria-disabled={!ready}
               >
-                Accept all
+                {t.accept}
               </Button>
             </div>
           </div>
