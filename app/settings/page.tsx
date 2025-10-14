@@ -190,73 +190,73 @@ export default function SettingsPage() {
 
   const t = translations[language] || translations["en"];
   return (
-    <div className="min-h-screen bg-[#181818] text-white flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold mb-8">{t.profileSettings}</h1>
-      <div className="bg-[#232323] rounded-xl p-8 shadow-lg w-full max-w-xl mb-8">
-        <div className="flex flex-wrap gap-6 mb-6">
-          <div className="flex-1 min-w-[200px]">
+    <div className="min-h-screen bg-[#181818] text-white flex flex-col items-center py-6 sm:py-10 px-4">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">{t.profileSettings}</h1>
+      <div className="bg-[#232323] rounded-xl p-4 sm:p-8 shadow-lg w-full max-w-xl mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-6 mb-4 sm:mb-6">
+          <div className="flex-1 min-w-full sm:min-w-[200px]">
             <label className="block text-sm mb-1">{t.nickname}</label>
-            <input value={nickname} onChange={e => setNickname(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333]" />
+            <input value={nickname} onChange={e => setNickname(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333] text-sm sm:text-base" />
           </div>
-          <div className="flex-1 min-w-[200px]">
+          <div className="flex-1 min-w-full sm:min-w-[200px]">
             <label className="block text-sm mb-1">{t.gender}</label>
-            <select value={gender} onChange={e => setGender(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333]">
+            <select value={gender} onChange={e => setGender(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333] text-sm sm:text-base">
               <option value="Male">{t.male}</option>
               <option value="Female">{t.female}</option>
             </select>
           </div>
         </div>
-        <div className="flex flex-wrap gap-6 mb-6">
-          <div className="flex-1 min-w-[200px]">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-6 mb-4 sm:mb-6">
+          <div className="flex-1 min-w-full sm:min-w-[200px]">
             <label className="block text-sm mb-1">{t.email}</label>
-            <input value={email} onChange={e => setEmail(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333]" />
+            <input value={email} onChange={e => setEmail(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333] text-sm sm:text-base" />
           </div>
-          <div className="flex-1 min-w-[200px]">
+          <div className="flex-1 min-w-full sm:min-w-[200px]">
             <label className="block text-sm mb-1">{t.password}</label>
-            <input type="password" value={password} disabled className="w-full p-2 rounded bg-[#252525] border border-[#333]" />
+            <input type="password" value={password} disabled className="w-full p-2 rounded bg-[#252525] border border-[#333] text-sm sm:text-base" />
           </div>
         </div>
-        <div className="flex flex-wrap gap-6 mb-6">
-          <div className="flex-1 min-w-[200px]">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-6 mb-4 sm:mb-6">
+          <div className="flex-1 min-w-full sm:min-w-[200px]">
             <label className="block text-sm mb-1">{t.phone}</label>
-            <input value={phone} onChange={e => setPhone(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333]" />
+            <input value={phone} onChange={e => setPhone(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333] text-sm sm:text-base" />
           </div>
         </div>
         <button
-          className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-4 py-2 rounded font-semibold w-full mt-4"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 sm:py-3 rounded font-semibold w-full mt-4 text-sm sm:text-base"
           onClick={handleSave}
           disabled={saving || loading}
         >
           {saving ? "Saving..." : "Save Changes"}
         </button>
       </div>
-      <div className="bg-[#232323] rounded-xl p-6 shadow-lg w-full max-w-xl mb-8 flex items-center justify-between">
+      <div className="bg-[#232323] rounded-xl p-4 sm:p-6 shadow-lg w-full max-w-xl mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <span className="font-semibold">{t.currentPlan}</span> <span className="ml-2 px-3 py-1 rounded bg-[#2563eb] text-[#fff]">{plan === "Premium" ? "Premium" : t.free}</span>
+          <span className="font-semibold">{t.currentPlan}</span> <span className="ml-2 px-3 py-1 rounded bg-primary text-primary-foreground text-sm">{plan === "Premium" ? "Premium" : t.free}</span>
         </div>
         <button
-          className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-4 py-2 rounded font-semibold"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded font-semibold w-full sm:w-auto text-sm sm:text-base"
           onClick={() => router.push("/premium")}
         >
           {t.upgrade}
         </button>
       </div>
-      <div className="bg-[#232323] rounded-xl p-6 shadow-lg w-full max-w-xl mb-8">
+      <div className="bg-[#232323] rounded-xl p-4 sm:p-6 shadow-lg w-full max-w-xl mb-6 sm:mb-8">
         <label className="block text-sm mb-2 font-semibold">{t.language}</label>
-        <select value={language} onChange={e => setLanguage(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333] mb-4">
+        <select value={language} onChange={e => setLanguage(e.target.value)} className="w-full p-2 rounded bg-[#252525] border border-[#333] mb-4 text-sm sm:text-base">
           {languages.map(lang => (
             <option key={lang.value} value={lang.value}>{lang.label}</option>
           ))}
         </select>
-        <label className="flex items-center gap-2 mb-4">
-          <input type="checkbox" checked={notifications} onChange={e => setNotifications(e.target.checked)} className="accent-blue-500" />
+        <label className="flex items-center gap-2 mb-4 text-sm sm:text-base">
+          <input type="checkbox" checked={notifications} onChange={e => setNotifications(e.target.checked)} className="accent-primary" />
           {t.notifications}
         </label>
         <p className="text-xs text-gray-400 mb-4">{t.notificationsDesc}</p>
         <div className="border-t border-[#333] pt-4 mt-4">
-          <span className="font-semibold text-blue-400">{t.dangerZone}</span>
+          <span className="font-semibold text-primary">{t.dangerZone}</span>
           <p className="text-xs text-gray-400 mb-2">{t.dangerDesc}</p>
-          <button className="text-blue-400 underline" onClick={() => setShowDeleteModal(true)}>{t.deleteAccount}</button>
+          <button className="text-primary underline text-sm" onClick={() => setShowDeleteModal(true)}>{t.deleteAccount}</button>
           <DeleteFeedbackModal
             open={showDeleteModal && !showDeleteConfirm}
             onClose={() => setShowDeleteModal(false)}
@@ -271,9 +271,9 @@ export default function SettingsPage() {
           />
         </div>
       </div>
-      <Card className="mt-8 border-blue-500">
-        <h2 className="text-xl font-bold text-blue-600 mb-2">{t.restrictions}</h2>
-        <ul className="list-disc pl-6 text-sm text-blue-700">
+      <Card className="mt-6 sm:mt-8 border-primary p-4 sm:p-6 w-full max-w-xl">
+        <h2 className="text-lg sm:text-xl font-bold text-primary mb-2">{t.restrictions}</h2>
+        <ul className="list-disc pl-4 sm:pl-6 text-xs sm:text-sm text-primary/80 space-y-1">
           {rules.map((rule, idx) => (
             <li key={idx}>{rule}</li>
           ))}
