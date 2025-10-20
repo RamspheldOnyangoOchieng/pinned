@@ -218,26 +218,42 @@ export default function CreateCharacterFlow() {
         });
     }, []);
 
-    // Load images for a specific category
+    // Load images for a specific category (IN PARALLEL for speed)
     const loadCategoryImages = async (category: string, values: string[]) => {
         console.log(`🖼️ Loading images for ${category}, style: ${style}, values:`, values);
         
-        for (const value of values) {
+        // Mark all as loading immediately
+        const keysToLoad = values
+            .filter(value => {
+                const key = `${category}-${value}-${style}`;
+                return !attributeImages[key] && !imageLoading[key];
+            })
+            .map(value => `${category}-${value}-${style}`);
+        
+        if (keysToLoad.length === 0) {
+            console.log(`⏭️ All images already loaded for ${category}`);
+            return;
+        }
+
+        // Set all to loading state at once
+        const loadingUpdate: Record<string, boolean> = {};
+        keysToLoad.forEach(key => { loadingUpdate[key] = true; });
+        setImageLoading(prev => ({ ...prev, ...loadingUpdate }));
+
+        // Load ALL images in PARALLEL (not sequential)
+        const promises = values.map(async (value) => {
             const key = `${category}-${value}-${style}`;
             
-            // Skip if already loaded or loading
-            if (attributeImages[key] || imageLoading[key]) {
-                console.log(`⏭️ Skipping ${key} (already loaded or loading)`);
-                continue;
+            // Skip if already loaded
+            if (attributeImages[key]) {
+                return;
             }
-
-            setImageLoading(prev => ({ ...prev, [key]: true }));
 
             try {
                 const url = `/api/attribute-images?category=${category}&value=${encodeURIComponent(value)}&style=${style}`;
                 console.log(`📡 Fetching: ${url}`);
                 
-                const response = await fetch(url);
+                const response = await fetch(url, { priority: 'high' });
                 const data = await response.json();
                 
                 console.log(`📦 Response for ${key}:`, data.success ? '✅' : '❌', data.image_url ? data.image_url.substring(0, 60) + '...' : 'no URL');
@@ -253,7 +269,11 @@ export default function CreateCharacterFlow() {
             } finally {
                 setImageLoading(prev => ({ ...prev, [key]: false }));
             }
-        }
+        });
+
+        // Wait for all to complete
+        await Promise.all(promises);
+        console.log(`✅ All images loaded for ${category}`);
     };
 
     // Preload images when step changes
