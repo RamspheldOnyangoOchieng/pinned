@@ -1,5 +1,6 @@
 import { getAdminClient } from "./supabase-admin"
-import { createClient } from "@/lib/supabase-browser"
+import { createClient as createBrowserClient } from "@/lib/supabase-browser"
+import { createClient as createServerClient } from "@/lib/supabase/server"
 import { getAnonymousId } from "./anonymous-id"
 
 export type CharacterProfile = {
@@ -32,11 +33,26 @@ export type Tag = {
 export class StorageService {
   // Get user ID (either authenticated or anonymous)
   static async getUserId() {
-    const supabase = createClient()
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
-    return session?.user?.id || getAnonymousId()
+    // Try to get server-side client first (for server components)
+    try {
+      const supabase = await createServerClient()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      return session?.user?.id || getAnonymousId()
+    } catch (e) {
+      // If server client fails, try browser client (for client components)
+      try {
+        const supabase = createBrowserClient()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+        return session?.user?.id || getAnonymousId()
+      } catch (err) {
+        // Fallback to anonymous ID
+        return getAnonymousId()
+      }
+    }
   }
 
   static async getCharacters() {

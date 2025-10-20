@@ -34,9 +34,7 @@ export function SiteFooter() {
       { id: 5, title: "Cookies", url: "/cookies" },
     ],
     aboutUs: [
-      { id: 1, title: "How It Works", url: "/hur-det-fungerar" },
       { id: 2, title: "About Us", url: "/om-oss" },
-      { id: 3, title: "Roadmap", url: "/roadmap" },
       { id: 4, title: "Blog", url: "/blogg" },
       { id: 5, title: "Guide", url: "/guide" },
       { id: 6, title: "Contact Us", url: "/kontakta" },

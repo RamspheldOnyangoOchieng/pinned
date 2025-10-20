@@ -147,7 +147,7 @@ export function CharacterList({ characters }: CharacterListProps) {
           </CardContent>
           <CardFooter className="p-4 pt-0">
             <Button asChild variant="outline" className="w-full">
-              <Link href={`/characters/${character.id}`}>View Character</Link>
+              <Link href={`/chat/${character.id}`}>Start Chat</Link>
             </Button>
           </CardFooter>
         </Card>
