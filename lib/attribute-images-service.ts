@@ -44,9 +44,25 @@ export async function getAttributeImage(
       return cached;
     }
 
-    // Generate new image if not cached
+    // Generate new image if not cached - with 30 second timeout
     console.log(`Cache miss for ${category}:${value}:${style}, generating...`);
-    return await generateAndCacheImage(category, value, style);
+    
+    // Create a timeout promise that rejects after 30 seconds
+    const timeoutPromise = new Promise<AttributeImage | null>((_, reject) => {
+      setTimeout(() => reject(new Error('Image generation timeout')), 30000);
+    });
+    
+    // Race between generation and timeout
+    try {
+      return await Promise.race([
+        generateAndCacheImage(category, value, style),
+        timeoutPromise
+      ]);
+    } catch (timeoutError) {
+      // If generation times out, return a placeholder or cached default
+      console.warn(`Generation timed out for ${category}:${value}:${style}`);
+      return null;
+    }
   } catch (error) {
     console.error('Error getting attribute image:', error);
     return null;

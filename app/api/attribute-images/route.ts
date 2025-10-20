@@ -7,6 +7,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAttributeImage, regenerateImage, getCategoryImages, batchGenerateImages } from '@/lib/attribute-images-service';
 
+// Cache this route for 24 hours - images don't change often
+export const revalidate = 86400; // 24 hours
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const category = searchParams.get('category');
@@ -17,10 +20,15 @@ export async function GET(request: NextRequest) {
     // If no specific value, return all images for the category
     if (category && !value) {
       const images = await getCategoryImages(category, style);
-      return NextResponse.json({
+      
+      const response = NextResponse.json({
         success: true,
         images: Array.from(images.values())
       });
+      
+      // Add aggressive caching headers
+      response.headers.set('Cache-Control', 'public, max-age=86400, immutable');
+      return response;
     }
 
     // Get specific image
@@ -35,7 +43,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Return the image data with image_url at top level for easier frontend access
-      return NextResponse.json({
+      const response = NextResponse.json({
         success: true,
         image_url: image.image_url,
         category: image.category,
@@ -48,6 +56,10 @@ export async function GET(request: NextRequest) {
         created_at: image.created_at,
         updated_at: image.updated_at
       });
+      
+      // Add aggressive caching headers for 24 hours
+      response.headers.set('Cache-Control', 'public, max-age=86400, immutable');
+      return response;
     }
 
     return NextResponse.json({
