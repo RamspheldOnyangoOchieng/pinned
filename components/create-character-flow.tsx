@@ -458,6 +458,50 @@ export default function CreateCharacterFlow() {
     const bustOptions = [
         { value: 'Petite', label: 'Petite', emoji: '🌸', description: 'Small delicate A-B cup' },
         { value: 'Small', label: 'Small', emoji: '🌼', description: 'Modest B-C cup' },
+        { value: 'Medium', label: 'Medium', emoji: '🌻', description: 'Average C-D cup' },
+        { value: 'Full', label: 'Full', emoji: '🌺', description: 'Fuller D-E cup' },
+        { value: 'Large', label: 'Large', emoji: '🌷', description: 'Large E-F cup' },
+        { value: 'Very Large', label: 'Very Large', emoji: '🌹', description: 'Very large F+ cup' },
+    ];
+
+    // AGGRESSIVE PRELOADING: Load ALL attribute images immediately when component mounts
+    useEffect(() => {
+        const startPreload = async () => {
+            console.log('🚀 AGGRESSIVE PRELOAD: Loading all attribute images in parallel...');
+            
+            // Define all categories with their values
+            const allCategories = [
+                { category: 'age', values: ageOptions.map(o => o.value) },
+                { category: 'body', values: bodyOptions.map(o => o.value) },
+                { category: 'ethnicity', values: ethnicityOptions.map(o => o.value) },
+                { category: 'hair_style', values: hairStyleOptions.map(o => o.value) },
+                { category: 'hair_length', values: hairLengthOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'hair_color', values: hairColorOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'eye_color', values: eyeColorOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'eye_shape', values: eyeShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'lip_shape', values: lipShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'face_shape', values: faceShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'hips', values: hipsOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'bust', values: bustOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+            ];
+
+            // Load all categories in parallel
+            const preloadPromises = allCategories.map(({ category, values }) =>
+                loadCategoryImages(category, values).catch(e => console.error(`Failed to preload ${category}:`, e))
+            );
+
+            try {
+                await Promise.all(preloadPromises);
+                console.log('✅ PRELOAD COMPLETE: All attribute images cached and ready!');
+            } catch (error) {
+                console.error('Error during preload:', error);
+            }
+        };
+
+        // Start preload after a tiny delay to not block render
+        const preloadTimer = setTimeout(startPreload, 100);
+        return () => clearTimeout(preloadTimer);
+    }, [style]); // Reload when style changes
         { value: 'Medium', label: 'Medium', emoji: '🌺', description: 'Balanced C-D cup' },
         { value: 'Large', label: 'Large', emoji: '🌹', description: 'Full D-DD cup' },
         { value: 'Extra Large', label: 'Extra Large', emoji: '💐', description: 'Very full E-F+ cup' },
