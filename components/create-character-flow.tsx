@@ -176,6 +176,8 @@ export default function CreateCharacterFlow() {
     const [selected, setSelected] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [creatingChat, setCreatingChat] = useState(false);
+    const [generatingCharacter, setGeneratingCharacter] = useState(false);
+    const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [showMore, setShowMore] = useState(false);
     const [customName, setCustomName] = useState("");
     const router = useRouter();
@@ -502,11 +504,6 @@ export default function CreateCharacterFlow() {
         const preloadTimer = setTimeout(startPreload, 100);
         return () => clearTimeout(preloadTimer);
     }, [style]); // Reload when style changes
-        { value: 'Medium', label: 'Medium', emoji: '🌺', description: 'Balanced C-D cup' },
-        { value: 'Large', label: 'Large', emoji: '🌹', description: 'Full D-DD cup' },
-        { value: 'Extra Large', label: 'Extra Large', emoji: '💐', description: 'Very full E-F+ cup' },
-        { value: 'Athletic', label: 'Athletic', emoji: '💪', description: 'Toned athletic chest' },
-    ];
 
     // Language options
     const languageOptions = [
@@ -609,6 +606,39 @@ export default function CreateCharacterFlow() {
         personality: customization.personality.length > 0 ? customization.personality.join(', ') : baseCharacter.personality,
         description: `${customName || baseCharacter.name} - Your customized AI companion`,
     } : undefined;
+    // Generate custom character image based on all customizations
+    async function handleGenerateCharacter() {
+        if (!customization.age || !customization.body) {
+            alert("Please complete your selections first");
+            return;
+        }
+
+        setGeneratingCharacter(true);
+        try {
+            const response = await fetch('/api/generate-custom-character', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    style,
+                    ...customization,
+                }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to generate character image');
+            }
+
+            const data = await response.json();
+            console.log('✅ Character generated:', data.image_url);
+            setGeneratedImage(data.image_url);
+        } catch (error) {
+            console.error("Error generating character:", error);
+            alert(error instanceof Error ? error.message : "Failed to generate character image. Please try again.");
+        } finally {
+            setGeneratingCharacter(false);
+        }
+    }
 
     // Start chat with selected character
     function handleStartChat() {
@@ -621,40 +651,52 @@ export default function CreateCharacterFlow() {
             return;
         }
 
-        setCreatingChat(true);
-        
-        try {
-            const customCharacterId = `custom-${Date.now()}-${selectedCharacter.id}`;
+        if (generatedImage) {
+            setCreatingChat(true);
             
-            const customCharacterData = {
-                id: customCharacterId,
-                name: selectedCharacter.name,
-                age: selectedCharacter.age,
-                image: selectedCharacter.image,
-                description: selectedCharacter.description,
-                personality: selectedCharacter.personality,
-                occupation: selectedCharacter.occupation,
-                hobbies: selectedCharacter.hobbies,
-                body: selectedCharacter.body,
-                ethnicity: selectedCharacter.ethnicity,
-                language: selectedCharacter.language,
-                relationship: selectedCharacter.relationship,
-                system_prompt: selectedCharacter.system_prompt,
-                character_type: 'custom',
-                is_new: true,
-                created_at: new Date().toISOString(),
-            };
-            
-            localStorage.setItem(`character-${customCharacterId}`, JSON.stringify(customCharacterData));
-            
-            console.log("Custom character created:", customCharacterData);
-            
-            router.push(`/chat/${customCharacterId}`);
-        } catch (error) {
-            console.error("Error creating character:", error);
-            alert("Failed to create character. Please try again.");
-        } finally {
-            setCreatingChat(false);
+            try {
+                const customCharacterId = `custom-${Date.now()}-${selectedCharacter.id}`;
+                
+                // Build a description from customization
+                const customDescription = [
+                    customization.age && `${customization.age} year old`,
+                    customization.ethnicity,
+                    customization.body,
+                ].filter(Boolean).join(', ');
+                
+                const customCharacterData = {
+                    id: customCharacterId,
+                    name: customName || selectedCharacter.name,
+                    age: customization.age,
+                    image: generatedImage, // Use generated image
+                    description: customDescription || selectedCharacter.description,
+                    personality: customization.personality.join(', ') || selectedCharacter.personality,
+                    occupation: customization.occupation || selectedCharacter.occupation,
+                    hobbies: customization.hobbies.join(', ') || selectedCharacter.hobbies,
+                    body: customization.body,
+                    ethnicity: customization.ethnicity,
+                    language: customization.language,
+                    relationship: customization.relationship,
+                    system_prompt: selectedCharacter.system_prompt,
+                    character_type: 'custom',
+                    is_new: true,
+                    created_at: new Date().toISOString(),
+                    // Store all customization data
+                    customization: customization,
+                    style: style,
+                };
+                
+                localStorage.setItem(`character-${customCharacterId}`, JSON.stringify(customCharacterData));
+                
+                console.log("Custom character created with generated image:", customCharacterData);
+                
+                router.push(`/chat/${customCharacterId}`);
+            } catch (error) {
+                console.error("Error creating character:", error);
+                alert("Failed to create character. Please try again.");
+            } finally {
+                setCreatingChat(false);
+            }
         }
     }
 
@@ -1295,70 +1337,132 @@ export default function CreateCharacterFlow() {
             {/* Step 19: Name & Final Preview */}
             {selectedCharacter && step === 19 && (
                 <div className="flex flex-col items-center min-h-[300px]">
-                    <div className="text-2xl sm:text-3xl font-bold mb-2">Name Your AI</div>
-                    <div className="text-sm sm:text-base text-gray-400 mb-6">Give your companion a unique name</div>
-                    
-                    <div className="mb-6 w-full max-w-md px-4">
-                        <input
-                            type="text"
-                            value={customName}
-                            onChange={(e) => setCustomName(e.target.value)}
-                            placeholder={baseCharacter?.name || "Enter a name..."}
-                            className="w-full px-4 py-3 rounded-lg bg-[#23232b] border border-[#252525] text-white placeholder-gray-500 focus:border-primary focus:outline-none text-base"
-                        />
+                    <div className="text-2xl sm:text-3xl font-bold mb-2">
+                        {generatedImage ? "Review Your Character" : "Generate Your Character"}
                     </div>
+                    <div className="text-sm sm:text-base text-gray-400 mb-6">
+                        {generatedImage 
+                            ? "Customize the name and start chatting!" 
+                            : "Generate a unique character image based on your selections"}
+                    </div>
+                    
+                    {generatedImage && (
+                        <div className="mb-6 w-full max-w-md px-4">
+                            <label className="block text-xs text-gray-400 mb-2">CHARACTER NAME</label>
+                            <input
+                                type="text"
+                                value={customName}
+                                onChange={(e) => setCustomName(e.target.value)}
+                                placeholder={baseCharacter?.name || "Enter a name..."}
+                                className="w-full px-4 py-3 rounded-lg bg-[#23232b] border border-[#252525] text-white placeholder-gray-500 focus:border-primary focus:outline-none text-base"
+                            />
+                        </div>
+                    )}
 
                     <div className="bg-[#23232b] rounded-2xl p-6 sm:p-8 shadow-lg w-full max-w-md flex flex-col items-center">
-                        <img
-                            src={selectedCharacter.image}
-                            alt={selectedCharacter.name}
-                            className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 object-cover border-4 border-primary shadow-lg"
-                        />
-                        <div className="text-2xl sm:text-3xl font-bold mb-2">{selectedCharacter.name}</div>
-                        <div className="text-xs text-gray-400 mb-4 text-center">{selectedCharacter.description}</div>
+                        {/* Generated Character Image or Loading */}
+                        {generatedImage ? (
+                            <img
+                                src={generatedImage}
+                                alt="Generated Character"
+                                className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 object-cover border-4 border-primary shadow-lg"
+                            />
+                        ) : (
+                            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 bg-[#18181f] border-4 border-primary/20 flex items-center justify-center">
+                                <Loader2 className={`w-8 h-8 ${generatingCharacter ? 'animate-spin' : ''} text-primary`} />
+                            </div>
+                        )}
                         
-                        <div className="w-full space-y-2 text-sm">
-                            <div className="flex justify-between"><span className="text-gray-400">Age:</span><span>{customization.age}</span></div>
-                            <div className="flex justify-between"><span className="text-gray-400">Body:</span><span>{customization.body}</span></div>
-                            <div className="flex justify-between"><span className="text-gray-400">Ethnicity:</span><span>{customization.ethnicity}</span></div>
-                            <div className="flex justify-between"><span className="text-gray-400">Language:</span><span>{customization.language}</span></div>
-                            <div className="flex justify-between"><span className="text-gray-400">Relationship:</span><span>{customization.relationship}</span></div>
-                            <div className="flex justify-between"><span className="text-gray-400">Occupation:</span><span>{customization.occupation}</span></div>
+                        <div className="text-2xl sm:text-3xl font-bold mb-2">
+                            {generatedImage ? (customName || "Your Character") : "Generating..."}
                         </div>
-
-                        <div className="w-full mt-4">
-                            <div className="text-xs text-gray-400 mb-2">HOBBIES</div>
-                            <div className="flex flex-wrap gap-2">
-                                {customization.hobbies.map((hobby) => (
-                                    <Badge key={hobby} text={hobby} />
-                                ))}
-                            </div>
+                        <div className="text-xs text-gray-400 mb-4 text-center">
+                            {generatedImage 
+                                ? `${customization.age} • ${customization.ethnicity} • ${customization.body}` 
+                                : "Creating your perfect character..."}
                         </div>
+                        
+                        {generatedImage && (
+                            <>
+                                <div className="w-full space-y-2 text-sm mb-4">
+                                    <div className="flex justify-between"><span className="text-gray-400">Age:</span><span>{customization.age}</span></div>
+                                    <div className="flex justify-between"><span className="text-gray-400">Body:</span><span>{customization.body}</span></div>
+                                    <div className="flex justify-between"><span className="text-gray-400">Ethnicity:</span><span>{customization.ethnicity}</span></div>
+                                    <div className="flex justify-between"><span className="text-gray-400">Language:</span><span>{customization.language}</span></div>
+                                    <div className="flex justify-between"><span className="text-gray-400">Relationship:</span><span>{customization.relationship}</span></div>
+                                    <div className="flex justify-between"><span className="text-gray-400">Occupation:</span><span>{customization.occupation}</span></div>
+                                </div>
 
-                        <div className="w-full mt-4">
-                            <div className="text-xs text-gray-400 mb-2">PERSONALITY</div>
-                            <div className="flex flex-wrap gap-2">
-                                {customization.personality.map((trait) => (
-                                    <Badge key={trait} text={trait} />
-                                ))}
-                            </div>
-                        </div>
+                                <div className="w-full mt-4">
+                                    <div className="text-xs text-gray-400 mb-2">HOBBIES</div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {customization.hobbies.map((hobby) => (
+                                            <Badge key={hobby} text={hobby} />
+                                        ))}
+                                    </div>
+                                </div>
 
-                        <button
-                            className="mt-6 w-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-xl font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 justify-center"
-                            onClick={handleStartChat}
-                            disabled={creatingChat}
-                        >
-                            {creatingChat ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    Creating Chat...
-                                </>
-                            ) : (
-                                "Start Chat"
-                            )}
-                        </button>
+                                <div className="w-full mt-4">
+                                    <div className="text-xs text-gray-400 mb-2">PERSONALITY</div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {customization.personality.map((trait) => (
+                                            <Badge key={trait} text={trait} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
+                        {/* Generate Button */}
+                        {!generatedImage && (
+                            <button
+                                className="mt-6 w-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-xl font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 justify-center"
+                                onClick={handleGenerateCharacter}
+                                disabled={generatingCharacter}
+                            >
+                                {generatingCharacter ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        Generating Image...
+                                    </>
+                                ) : (
+                                    <>
+                                        ✨ Generate Character
+                                    </>
+                                )}
+                            </button>
+                        )}
+
+                        {/* Start Chat Button */}
+                        {generatedImage && (
+                            <button
+                                className="mt-6 w-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-xl font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 justify-center"
+                                onClick={handleStartChat}
+                                disabled={creatingChat}
+                            >
+                                {creatingChat ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        Creating Chat...
+                                    </>
+                                ) : (
+                                    "💬 Start Chat"
+                                )}
+                            </button>
+                        )}
                     </div>
+
+                    {generatedImage && (
+                        <button
+                            className="mt-4 text-sm text-gray-400 hover:text-gray-300 transition-colors"
+                            onClick={() => {
+                                setGeneratedImage(null);
+                                setCustomName("");
+                            }}
+                        >
+                            ↻ Generate Different Character
+                        </button>
+                    )}
                 </div>
             )}
 
@@ -1371,10 +1475,10 @@ export default function CreateCharacterFlow() {
                 >
                     <ChevronLeft className="w-5 h-5" /> Previous
                 </button>
-                {step < 10 && (
+                {step < steps.length - 1 && (
                     <button
                         className="flex items-center gap-2 px-6 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-bold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => setStep((s) => Math.min(10, s + 1))}
+                        onClick={() => setStep((s) => Math.min(steps.length - 1, s + 1))}
                         disabled={!canProceed()}
                     >
                         Next <ChevronRight className="w-5 h-5" />
