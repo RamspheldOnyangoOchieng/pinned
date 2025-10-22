@@ -20,7 +20,8 @@ export interface AttributeImage {
 }
 
 /**
- * Get cached image for an attribute, or generate if not exists
+ * Get cached image for an attribute - ONLY fetch from database, no generation
+ * All attribute images should be pre-generated via scripts
  */
 export async function getAttributeImage(
   category: string,
@@ -30,7 +31,7 @@ export async function getAttributeImage(
   const supabase = await createClient();
 
   try {
-    // Check cache first
+    // Fetch from database - ONLY, no generation fallback
     const { data: cached, error: fetchError } = await supabase
       .from('attribute_images')
       .select('*')
@@ -40,29 +41,19 @@ export async function getAttributeImage(
       .single();
 
     if (cached && !fetchError) {
-      console.log(`Cache hit for ${category}:${value}:${style}`);
+      console.log(`✅ Image found for ${category}:${value}:${style}`);
       return cached;
     }
 
-    // Generate new image if not cached - with 30 second timeout
-    console.log(`Cache miss for ${category}:${value}:${style}, generating...`);
-    
-    // Create a timeout promise that rejects after 30 seconds
-    const timeoutPromise = new Promise<AttributeImage | null>((_, reject) => {
-      setTimeout(() => reject(new Error('Image generation timeout')), 30000);
-    });
-    
-    // Race between generation and timeout
-    try {
-      return await Promise.race([
-        generateAndCacheImage(category, value, style),
-        timeoutPromise
-      ]);
-    } catch (timeoutError) {
-      // If generation times out, return a placeholder or cached default
-      console.warn(`Generation timed out for ${category}:${value}:${style}`);
+    if (fetchError?.code === 'PGRST116') {
+      // Not found - don't try to generate, just return null quickly
+      console.warn(`❌ Image not found in DB: ${category}:${value}:${style}`);
       return null;
     }
+
+    // Other database errors
+    console.error(`Database error fetching ${category}:${value}:${style}:`, fetchError);
+    return null;
   } catch (error) {
     console.error('Error getting attribute image:', error);
     return null;
