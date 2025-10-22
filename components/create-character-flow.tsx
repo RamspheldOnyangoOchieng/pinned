@@ -294,28 +294,28 @@ export default function CreateCharacterFlow() {
             loadCategoryImages('hair_style', hairStyleOptions.map(o => o.value));
         } else if (step === 6) {
             // Load hair length images
-            loadCategoryImages('hair_length', hairLengthOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('hair_length', hairLengthOptions.map(o => o.value));
         } else if (step === 7) {
             // Load hair color images
-            loadCategoryImages('hair_color', hairColorOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('hair_color', hairColorOptions.map(o => o.value));
         } else if (step === 8) {
             // Load eye color images
-            loadCategoryImages('eye_color', eyeColorOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('eye_color', eyeColorOptions.map(o => o.value));
         } else if (step === 9) {
             // Load eye shape images
-            loadCategoryImages('eye_shape', eyeShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('eye_shape', eyeShapeOptions.map(o => o.value));
         } else if (step === 10) {
             // Load lip shape images
-            loadCategoryImages('lip_shape', lipShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('lip_shape', lipShapeOptions.map(o => o.value));
         } else if (step === 11) {
             // Load face shape images
-            loadCategoryImages('face_shape', faceShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('face_shape', faceShapeOptions.map(o => o.value));
         } else if (step === 12) {
             // Load hips images
-            loadCategoryImages('hips', hipsOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('hips', hipsOptions.map(o => o.value));
         } else if (step === 13) {
             // Load bust images
-            loadCategoryImages('bust', bustOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')));
+            loadCategoryImages('bust', bustOptions.map(o => o.value));
         }
     }, [step, style]);
 
@@ -471,20 +471,20 @@ export default function CreateCharacterFlow() {
         const startPreload = async () => {
             console.log('🚀 AGGRESSIVE PRELOAD: Loading all attribute images in parallel...');
             
-            // Define all categories with their values
+            // Define all categories with their values - DO NOT TRANSFORM VALUES
             const allCategories = [
                 { category: 'age', values: ageOptions.map(o => o.value) },
                 { category: 'body', values: bodyOptions.map(o => o.value) },
                 { category: 'ethnicity', values: ethnicityOptions.map(o => o.value) },
                 { category: 'hair_style', values: hairStyleOptions.map(o => o.value) },
-                { category: 'hair_length', values: hairLengthOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
-                { category: 'hair_color', values: hairColorOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
-                { category: 'eye_color', values: eyeColorOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
-                { category: 'eye_shape', values: eyeShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
-                { category: 'lip_shape', values: lipShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
-                { category: 'face_shape', values: faceShapeOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
-                { category: 'hips', values: hipsOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
-                { category: 'bust', values: bustOptions.map(o => o.value.toLowerCase().replace(/\s+/g, '-')) },
+                { category: 'hair_length', values: hairLengthOptions.map(o => o.value) },
+                { category: 'hair_color', values: hairColorOptions.map(o => o.value) },
+                { category: 'eye_color', values: eyeColorOptions.map(o => o.value) },
+                { category: 'eye_shape', values: eyeShapeOptions.map(o => o.value) },
+                { category: 'lip_shape', values: lipShapeOptions.map(o => o.value) },
+                { category: 'face_shape', values: faceShapeOptions.map(o => o.value) },
+                { category: 'hips', values: hipsOptions.map(o => o.value) },
+                { category: 'bust', values: bustOptions.map(o => o.value) },
             ];
 
             // Load all categories in parallel
@@ -1007,7 +1007,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {hairLengthOptions.map((option) => {
-                            const imageKey = `hair_length-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `hair_length-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
@@ -1035,7 +1035,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {hairColorOptions.map((option) => {
-                            const imageKey = `hair_color-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `hair_color-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
@@ -1063,7 +1063,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {eyeColorOptions.map((option) => {
-                            const imageKey = `eye_color-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `eye_color-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
@@ -1091,7 +1091,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {eyeShapeOptions.map((option) => {
-                            const imageKey = `eye_shape-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `eye_shape-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
@@ -1119,7 +1119,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {lipShapeOptions.map((option) => {
-                            const imageKey = `lip_shape-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `lip_shape-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
@@ -1147,7 +1147,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {faceShapeOptions.map((option) => {
-                            const imageKey = `face_shape-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `face_shape-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
@@ -1175,7 +1175,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {hipsOptions.map((option) => {
-                            const imageKey = `hips-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `hips-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
@@ -1203,7 +1203,7 @@ export default function CreateCharacterFlow() {
                     
                     <div className="flex flex-wrap gap-4 justify-center max-w-5xl">
                         {bustOptions.map((option) => {
-                            const imageKey = `bust-${option.value.toLowerCase().replace(/\s+/g, '-')}-${style}`;
+                            const imageKey = `bust-${option.value}-${style}`;
                             return (
                                 <SelectionCard
                                     key={option.value}
