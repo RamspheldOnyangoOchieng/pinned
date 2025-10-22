@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
-    "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start",
-    "migrate:sql": "node scripts/migrate.js"
+  "build": "next build",
+  "dev": "next dev",
+  "lint": "next lint",
+  "start": "next start",
+  "migrate:sql": "node scripts/migrate.js",
+  "create-resources": "node scripts/create_resources.js",
+  "seed": "pnpm dlx ts-node --project tsconfig.json scripts/seed.ts",
+  "test-novita": "node scripts/test-novita.js"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
