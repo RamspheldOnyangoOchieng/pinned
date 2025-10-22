@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ShieldCheck, Database, Code, TestTube } from "lucide-react"
+import { ShieldCheck, Database, Code, TestTube, Palette } from "lucide-react"
 
 export default function AdminDashboard() {
   return (
@@ -66,17 +66,17 @@ export default function AdminDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TestTube className="h-5 w-5" />
-              Test RLS Policies
+              <Palette className="h-5 w-5" />
+              Character Features
             </CardTitle>
-            <CardDescription>Verify your RLS policies are working</CardDescription>
+            <CardDescription>Manage character attributes and images</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>Test if your Row Level Security policies are correctly enforced.</p>
+            <p>Add, view, or delete character feature images for all categories.</p>
           </CardContent>
           <CardFooter>
-            <Link href="/admin/test-rls">
-              <Button>Test RLS</Button>
+            <Link href="/admin/character-features">
+              <Button>Manage Features</Button>
             </Link>
           </CardFooter>
         </Card>
