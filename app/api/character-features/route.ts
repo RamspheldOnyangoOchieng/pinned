@@ -16,22 +16,22 @@ export async function GET(request: Request) {
     if (action === 'categories') {
       const { data, error } = await supabase
         .from('attribute_images')
-        .select('category, count() as total', { count: 'exact', head: false });
+        .select('category');
 
       if (error) throw error;
 
-      // Group by category
+      // Group by category and count
       const categories: Record<string, any> = {};
       data?.forEach((row: any) => {
         if (!categories[row.category]) {
           categories[row.category] = { name: row.category, images: 0 };
         }
-        categories[row.category].images = row.total;
+        categories[row.category].images++;
       });
 
       return NextResponse.json({
         success: true,
-        categories: Object.values(categories),
+        categories: Object.values(categories).sort((a, b) => a.name.localeCompare(b.name)),
       });
     }
 

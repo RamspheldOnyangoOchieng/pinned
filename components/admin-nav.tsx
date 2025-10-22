@@ -16,6 +16,10 @@ export function AdminNav() {
       name: "Payment Methods",
       href: "/admin/payment-methods",
     },
+    {
+      name: "Character Features",
+      href: "/admin/character-features",
+    },
   ]
 
   return (

@@ -316,6 +316,21 @@ export default function CreateCharacterFlow() {
         } else if (step === 13) {
             // Load bust images
             loadCategoryImages('bust', bustOptions.map(o => o.value));
+        } else if (step === 14) {
+            // Load language images
+            loadCategoryImages('language', languageOptions.map(o => o.value));
+        } else if (step === 15) {
+            // Load relationship images
+            loadCategoryImages('relationship', relationshipOptions.map(o => o.value));
+        } else if (step === 16) {
+            // Load occupation images
+            loadCategoryImages('occupation', occupationOptions.map(o => o.value));
+        } else if (step === 17) {
+            // Load hobbies images
+            loadCategoryImages('hobbies', hobbiesOptions.map(o => o.value));
+        } else if (step === 18) {
+            // Load personality images
+            loadCategoryImages('personality', personalityOptions.map(o => o.value));
         }
     }, [step, style]);
 
@@ -1227,13 +1242,15 @@ export default function CreateCharacterFlow() {
                     <div className="text-2xl sm:text-3xl font-bold mb-2">Choose Language</div>
                     <div className="text-sm sm:text-base text-gray-400 mb-8">What language should they speak?</div>
                     
-                    <div className="flex flex-wrap gap-4 justify-center max-w-4xl">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl">
                         {languageOptions.map((option) => (
                             <SelectionCard
                                 key={option.value}
                                 emoji={option.emoji}
                                 label={option.label}
                                 description={option.description}
+                                imageUrl={attributeImages[`language-${option.value}-${style}`]}
+                                loading={imageLoading[`language-${option.value}-${style}`] ?? false}
                                 selected={customization.language === option.value}
                                 onClick={() => setSingleSelect('language', option.value)}
                             />
@@ -1248,13 +1265,15 @@ export default function CreateCharacterFlow() {
                     <div className="text-2xl sm:text-3xl font-bold mb-2">Relationship Status</div>
                     <div className="text-sm sm:text-base text-gray-400 mb-8">How should they approach relationships?</div>
                     
-                    <div className="flex flex-wrap gap-4 justify-center max-w-4xl">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl">
                         {relationshipOptions.map((option) => (
                             <SelectionCard
                                 key={option.value}
                                 emoji={option.emoji}
                                 label={option.label}
                                 description={option.description}
+                                imageUrl={attributeImages[`relationship-${option.value}-${style}`]}
+                                loading={imageLoading[`relationship-${option.value}-${style}`] ?? false}
                                 selected={customization.relationship === option.value}
                                 onClick={() => setSingleSelect('relationship', option.value)}
                             />
@@ -1269,13 +1288,15 @@ export default function CreateCharacterFlow() {
                     <div className="text-2xl sm:text-3xl font-bold mb-2">Choose Occupation</div>
                     <div className="text-sm sm:text-base text-gray-400 mb-8">What do they do for a living?</div>
                     
-                    <div className="flex flex-wrap gap-4 justify-center max-w-4xl">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl">
                         {occupationOptions.map((option) => (
                             <SelectionCard
                                 key={option.value}
                                 emoji={option.emoji}
                                 label={option.label}
                                 description={option.description}
+                                imageUrl={attributeImages[`occupation-${option.value}-${style}`]}
+                                loading={imageLoading[`occupation-${option.value}-${style}`] ?? false}
                                 selected={customization.occupation === option.value}
                                 onClick={() => setSingleSelect('occupation', option.value)}
                             />
@@ -1291,11 +1312,15 @@ export default function CreateCharacterFlow() {
                     <div className="text-sm sm:text-base text-gray-400 mb-2">Select hobbies and interests</div>
                     <div className="text-xs text-gray-500 mb-8">(Select at least one)</div>
                     
-                    <div className="flex flex-wrap gap-3 justify-center max-w-2xl">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl">
                         {hobbiesOptions.map((option) => (
-                            <Badge
+                            <SelectionCard
                                 key={option.value}
-                                text={`${option.emoji} ${option.label}`}
+                                emoji={option.emoji}
+                                label={option.label}
+                                description=""
+                                imageUrl={attributeImages[`hobbies-${option.value}-${style}`]}
+                                loading={imageLoading[`hobbies-${option.value}-${style}`] ?? false}
                                 selected={customization.hobbies.includes(option.value)}
                                 onClick={() => toggleMultiSelect('hobbies', option.value)}
                             />
@@ -1316,11 +1341,15 @@ export default function CreateCharacterFlow() {
                     <div className="text-sm sm:text-base text-gray-400 mb-2">What personality traits should they have?</div>
                     <div className="text-xs text-gray-500 mb-8">(Select at least one)</div>
                     
-                    <div className="flex flex-wrap gap-3 justify-center max-w-2xl">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl">
                         {personalityOptions.map((option) => (
-                            <Badge
+                            <SelectionCard
                                 key={option.value}
-                                text={`${option.emoji} ${option.label}`}
+                                emoji={option.emoji}
+                                label={option.label}
+                                description=""
+                                imageUrl={attributeImages[`personality-${option.value}-${style}`]}
+                                loading={imageLoading[`personality-${option.value}-${style}`] ?? false}
                                 selected={customization.personality.includes(option.value)}
                                 onClick={() => toggleMultiSelect('personality', option.value)}
                             />

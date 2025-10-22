@@ -2,13 +2,14 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BarChart, CreditCard, Home, Settings, Users, Image, MessageSquare, DollarSign, FileText, Package, Gem } from "lucide-react"
+import { BarChart, CreditCard, Home, Settings, Users, Image, MessageSquare, DollarSign, FileText, Package, Gem, Palette } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // Make sure the Settings link is pointing to the correct path
 const navigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: Home },
   { name: "Characters", href: "/admin/dashboard/characters", icon: MessageSquare },
+  { name: "Character Features", href: "/admin/character-features", icon: Palette },
   { name: "Users", href: "/admin/dashboard/users", icon: Users },
   { name: "Image Suggestions", href: "/admin/dashboard/image-suggestions", icon: Image },
   { name: "Banners", href: "/admin/dashboard/banners", icon: BarChart },
