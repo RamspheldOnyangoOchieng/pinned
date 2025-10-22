@@ -84,7 +84,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
       />
 
       {/* Character Video (shown on hover) */}
-      {character.videoUrl ? (
+      {character.videoUrl && character.videoUrl !== "about:blank" && character.videoUrl.trim() ? (
         <video
           ref={videoRef}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovering ? "opacity-100" : "opacity-0"}`}
@@ -92,6 +92,9 @@ export function CharacterCard({ character }: CharacterCardProps) {
           muted
           loop
           playsInline
+          onError={() => {
+            console.warn("Video failed to load:", character.videoUrl);
+          }}
         />
       ) : null}
 

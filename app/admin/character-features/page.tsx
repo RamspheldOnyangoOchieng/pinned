@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { Trash2, Plus, Loader2, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+export const dynamic = 'force-dynamic';
 
 interface CategoryData {
   name: string;
